@@ -5,6 +5,8 @@ import gzip
 from io import BytesIO
 from urllib.parse import urlsplit
 
+from .constants import TURNOUT_URL
+
 def fetch_data(url):
     # Parse the URL
     parsed_url = urlsplit(url)
@@ -47,9 +49,11 @@ def fetch_data(url):
     return data
 
 
-if __name__ == "__main__":
-    url = "https://sos.ga.gov/page/election-data-hub-turnout"
-
-    data = fetch_data(url)
+def main():
+    data = fetch_data(TURNOUT_URL)
     decoded_data = data.decode("utf-8")
     print(decoded_data)
+
+
+if __name__ == "__main__":
+    main()
