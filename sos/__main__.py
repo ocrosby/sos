@@ -6,8 +6,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 
 from sos.constants import TURNOUT_URL
 from sos.filesystem import write_file
-from sos.helpers.html import beautify_data
-from sos.helpers.selenium_webdriver import (
+from sos.utils.html import beautify_data
+from sos.utils.selenium_webdriver import (
     create_driver,
     scroll_to_element,
     switch_to_iframe,

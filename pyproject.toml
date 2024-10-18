@@ -46,6 +46,7 @@ dev = [
 
 # This section defines how setuptools should find packages.
 [tool.setuptools.packages.find]
+where = ["."]
 include = ["sos", "sos.*"]
 exclude = ["data", "node_modules", "tests", "tests.*"]
 
