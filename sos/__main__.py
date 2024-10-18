@@ -1,35 +1,32 @@
-import gzip
-import requests
-import brotli
-
-from io import BytesIO
-
 from sos.constants import TURNOUT_URL
 
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def fetch_data(url):
-    headers: dict[str, str] = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        "Referer": "https://sos.ga.gov/",
-    }
+    # Set up headless Chrome options
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
 
-    response = requests.get(url, headers=headers, timeout=10)
+    # Initialize the WebDriver
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
-    # Read the response
-    data = response.content
+    try:
+        # Fetch the page
+        driver.get(url)
 
-    content_encoding = response.headers.get("Content-Encoding")
-
-    # Decompress if the content is gzip-encoded
-    if content_encoding == "br":
-        data = brotli.decompress(data)
+        # Get the page source
+        data = driver.page_source
+    finally:
+        # Clean up and close the driver
+        driver.quit()
 
     return data
 

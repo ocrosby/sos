@@ -17,6 +17,7 @@ dependencies = [
     "invoke",
     "brotli",
     "selenium",
+    "webdriver_manager"
 ]
 
 urls = {homepage = "https://github.com/ocrosby/sos"}
