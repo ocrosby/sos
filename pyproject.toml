@@ -6,9 +6,97 @@ build-backend = "setuptools.build_meta"
 name = "sos"
 version = "0.1.0"
 description = "Data capture for the Georgia secretary of state site."
-authors = ["ocrosby <your-email@example.com>"]
+authors = [
+    {name = "Omar Crosby", email = "omar.crosby@gmail.com"},
+]
 license = "MIT"
+dependencies = [
+    "click",
+    "pydantic",
+    "requests",
+    "invoke",
+]
 
-[project.dependencies]
-requests = "^2.28.0"
-invoke = "^1.7.0"
+urls = {homepage = "https://github.com/ocrosby/sos"}
+
+[project.scripts]
+sos = "sos.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "mypy",
+    "isort",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-xdist",
+    "invoke",
+    "radon",
+    "tox",
+    "coverage",
+    "coveralls",
+]
+
+# This section defines how setuptools should find packages.
+[tool.setuptools.packages.find]
+include = ["sos", "sos.*"]
+exclude = ["data", "node_modules", "tests", "tests.*"]
+
+# This section specifies the configuration for the `black` code formatter.
+[tool.black]
+line-length = 88
+target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
+include = '\.pyi?$'
+
+
+[tool.pylint]
+output-format = "text"
+
+[tool.pylint.master]
+ignore = ["venv", ".venv", ".tox", "node_modules", "data"]
+jobs = 5  # Number of parallel jobs to run
+
+[tool.pylint.messages_control]
+disable = ["C0114", "C0115", "C0116"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+strict = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+# Enable/Disable pytest features or plugins
+minversion = "6.0"
+addopts = "--verbose --tb=short --cov=sos"  # Additional pytest options, e.g., verbosity, traceback style
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+branch = true  # Enable branch coverage
+source = ["sos"]  # Source code directories to measure coverage
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 43  # Fail if coverage is below 44%
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["sos"]
+known_third_party = ["click", "pytest"]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
