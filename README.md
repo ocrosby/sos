@@ -23,6 +23,18 @@ source venv/bin/activate
 pip install -e ".[dev]"
 ```
 
+Note: once invoke is installed you can install dependencies again by running the following command:
+
+```shell
+inv i
+```
+
+or 
+
+```shell
+invoke install
+```
+
 ## Running the Prorgam
 
 ```shell
