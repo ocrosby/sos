@@ -15,6 +15,7 @@ dependencies = [
     "pydantic",
     "requests",
     "invoke",
+    "brotli"
 ]
 
 urls = {homepage = "https://github.com/ocrosby/sos"}

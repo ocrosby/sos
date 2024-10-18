@@ -39,9 +39,6 @@ def install(c: Context, prod: bool = False) -> None:
         c.run("echo 'Installing development dependencies ...'")
         c.run("pip install -e .[dev]")
 
-    # Install the dependencies
-    c.run("echo 'Installing npm dependencies ...'")
-    c.run("npm install")
 
 
 @task(aliases=["f"])
@@ -100,15 +97,6 @@ def build(c: Context) -> None:
     """Build the package."""
     c.run("echo 'Building the package ...'")
     c.run("python -m build")
-
-
-@task(aliases=["s"])
-def semantic_release(c: Context) -> None:
-    """Run semantic release."""
-    c.run("echo 'Running semantic release ...'")
-    c.run("rm -rf node_modules")
-    c.run("npm install")
-    c.run("npx semantic-release")
 
 
 @task(aliases="r", pre=[clean, build])
@@ -217,7 +205,6 @@ ns = Collection(
     test,
     build,
     coverage,
-    semantic_release,
     format_code,
     package,
     run_all_tasks,

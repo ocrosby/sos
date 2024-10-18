@@ -1,11 +1,9 @@
-import pytest
-
-from sos.main import fetch_data
+from sos.__main__ import fetch_data
 
 
 def test_fetch_data(mocker):
     # Mock the TURNOUT_URL
-    TURNOUT_URL = "http://example.com/data"
+    test_url = "http://example.com/data"
 
     # Mock the requests.get call to return a mock response
     mock_response = mocker.Mock()
@@ -13,7 +11,7 @@ def test_fetch_data(mocker):
     mocker.patch("requests.get", return_value=mock_response)
 
     # Call the fetch_data function
-    result = fetch_data(TURNOUT_URL)
+    result = fetch_data(test_url)
 
     # Assert that the result is as expected
     assert result == b"mocked data"
