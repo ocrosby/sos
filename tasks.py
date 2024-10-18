@@ -22,7 +22,7 @@ def clean(c: Context) -> None:
     c.run("find sos tests -name '.pytest_cache' -type d -exec rm -r {} +")
     c.run("find sos tests -name '__pycache__' -type d -exec rm -r {} +")
 
-    c.run("rm -f *.log junit.xml .coverage coverage.xml")
+    c.run("rm -f *.log junit.xml .coverage coverage.xml sos/output.html")
     c.run("rm -rf .tox/ dist/ build/ *.egg-info")
 
     # Clear the npm cache
