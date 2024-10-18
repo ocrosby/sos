@@ -40,7 +40,6 @@ def install(c: Context, prod: bool = False) -> None:
         c.run("pip install -e .[dev]")
 
 
-
 @task(aliases=["f"])
 def format_code(c: Context) -> None:
     """Format code with black and isort."""
