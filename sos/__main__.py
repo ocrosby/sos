@@ -33,7 +33,8 @@ def fetch_data(url):
 
 def main():
     data = fetch_data(TURNOUT_URL)
-    print(data)
+    with open("output.html", "w", encoding="utf-8") as file:
+        file.write(data)
 
 
 if __name__ == "__main__":
