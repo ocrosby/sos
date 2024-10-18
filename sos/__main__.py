@@ -6,8 +6,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 
 from sos.constants import TURNOUT_URL
 from sos.filesystem import write_file
-from sos.utils.html import beautify_data
-from sos.utils.selenium_webdriver import (
+from sos.sos_utils.html import beautify_data
+from sos.sos_utils.selenium_webdriver import (
     create_driver,
     scroll_to_element,
     switch_to_iframe,
@@ -45,7 +45,7 @@ def fetch_data(driver: WebDriver, url: str, timeout: int = 20) -> str:
 
 def main():
     # Initialize the WebDriver
-    driver = create_driver()
+    driver = create_driver(headless=False)
 
     data = fetch_data(driver, TURNOUT_URL, timeout=20)
     pretty_html = beautify_data(data)
