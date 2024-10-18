@@ -1,11 +1,11 @@
+import gzip
 import http.client
 import ssl
-import gzip
-
 from io import BytesIO
 from urllib.parse import urlsplit
 
 from .constants import TURNOUT_URL
+
 
 def fetch_data(url):
     # Parse the URL
@@ -33,10 +33,10 @@ def fetch_data(url):
     # Read the response
     data = response.read()
 
-    content_encoding = response.getheader('Content-Encoding')
+    content_encoding = response.getheader("Content-Encoding")
 
     # Decompress if the content is gzip-encoded
-    if content_encoding == 'gzip':
+    if content_encoding == "gzip":
         buf = BytesIO(data)
         with gzip.GzipFile(fileobj=buf) as f:
             data = f.read()

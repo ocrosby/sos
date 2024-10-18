@@ -20,6 +20,6 @@ source venv/bin/activate
 ## Install the package in editable mode
 
 ```shell
-pip install -e .
+pip install -e ".[dev]"
 ```
 

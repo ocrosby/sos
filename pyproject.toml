@@ -9,7 +9,7 @@ description = "Data capture for the Georgia secretary of state site."
 authors = [
     {name = "Omar Crosby", email = "omar.crosby@gmail.com"},
 ]
-license = "MIT"
+license = {file = "LICENSE"}
 dependencies = [
     "click",
     "pydantic",
