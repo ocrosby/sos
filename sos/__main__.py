@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+from bs4 import BeautifulSoup
+
 from sos.constants import TURNOUT_URL
 
 
@@ -33,8 +35,10 @@ def fetch_data(url):
 
 def main():
     data = fetch_data(TURNOUT_URL)
+    soup = BeautifulSoup(data, "html.parser")
+    pretty_html = soup.prettify()
     with open("output.html", "w", encoding="utf-8") as file:
-        file.write(data)
+        file.write(pretty_html)
 
 
 if __name__ == "__main__":
