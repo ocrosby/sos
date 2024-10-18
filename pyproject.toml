@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sos"
+version = "0.1.0"
+description = "Data capture for the Georgia secretary of state site."
+authors = ["ocrosby <your-email@example.com>"]
+license = "MIT"
+
+[project.dependencies]
+requests = "^2.28.0"
+invoke = "^1.7.0"
