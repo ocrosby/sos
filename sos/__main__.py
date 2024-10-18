@@ -1,48 +1,36 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from bs4 import BeautifulSoup
+"""
+This module is the entry point for the application.
+"""
+
+from selenium.webdriver.chrome.webdriver import WebDriver
+
 from sos.constants import TURNOUT_URL
+from sos.filesystem import write_file
+from sos.helpers import (
+    create_driver,
+    scroll_to_element,
+    switch_to_iframe,
+    wait_for_clickability,
+    wait_for_visibility,
+)
+from sos.html import beautify_data
 
 
-def fetch_data(url):
-    # Set up headless Chrome options
-    chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-
-    # Initialize the WebDriver
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-
+def fetch_data(driver: WebDriver, url: str, timeout: int = 20) -> str:
     try:
         # Fetch the page
         driver.get(url)
 
-        # Switch to the iframe by its title
-        WebDriverWait(driver, 20).until(
-            EC.frame_to_be_available_and_switch_to_it((By.XPATH, "//iframe[@title='Data Hub - Voter Registration']"))
-        )
+        absentee_ballots_button_id = "AbsenteeBallots"
 
-        # Wait until the button is visible
-        WebDriverWait(driver, 20).until(
-            EC.visibility_of_element_located((By.ID, "AbsenteeBallots"))
-        )
+        switch_to_iframe(driver, timeout, "Data Hub - Voter Registration")
 
-        # Scroll the button into view
-        button = driver.find_element(By.ID, "AbsenteeBallots")
-        driver.execute_script("arguments[0].scrollIntoView(true);", button)
+        wait_for_visibility(driver, timeout, element_id=absentee_ballots_button_id)
+
+        button = scroll_to_element(driver, absentee_ballots_button_id)
 
         # Wait until the button is clickable
-        WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.ID, "AbsenteeBallots"))
-        )
+        wait_for_clickability(driver, timeout, element_id=absentee_ballots_button_id)
 
         button.click()
 
@@ -56,11 +44,12 @@ def fetch_data(url):
 
 
 def main():
-    data = fetch_data(TURNOUT_URL)
-    soup = BeautifulSoup(data, "html.parser")
-    pretty_html = soup.prettify()
-    with open("output.html", "w", encoding="utf-8") as file:
-        file.write(pretty_html)
+    # Initialize the WebDriver
+    driver = create_driver()
+
+    data = fetch_data(driver, TURNOUT_URL, timeout=20)
+    pretty_html = beautify_data(data)
+    write_file("output.html", pretty_html)
 
 
 if __name__ == "__main__":
