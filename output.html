@@ -1,0 +1,156 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="light only" name="color-scheme"/>
+  <script src="libraries/jquery.min.js">
+  </script>
+  <link href="css/styles.css" rel="stylesheet"/>
+  <script src="js/vars.js">
+  </script>
+  <script src="js/main.js" type="application/javascript">
+  </script>
+  <script crossorigin="anonymous" data-auth-type="Oauth2" data-client-id="5718bf52ac824c6ea4d5942eecb04223" data-get-access-token="getAccessToken" data-host="https://sos-ga-gov.us.qlikcloudgov.com" src="https://cdn.jsdelivr.net/npm/@qlik/embed-web-components@1/dist/index.min.js" type="application/javascript">
+  </script>
+  <style>
+   qlik-embed-initial-selections {display: none};
+  </style>
+  <style>
+   qlik-embed-initial-selections {display: none};
+  </style>
+  <title>
+   Turnout &amp; Demographics
+  </title>
+ </head>
+ <body>
+  <div class="content">
+   <div class="header">
+    <nav class="navigation">
+     <div>
+      <button class="active" id="AbsenteeBallots" onclick="changeSheet('AbsenteeBallots',this)">
+       Absentee Voting
+      </button>
+     </div>
+     <div>
+      <button class="" id="EarlyVoting" onclick="changeSheet('EarlyVoting',this)">
+       Early Voting (In Person)
+      </button>
+     </div>
+     <div>
+      <button id="TurnoutDemographics" onclick="changeSheet('TurnoutDemographics',this)">
+       Total Turnout
+      </button>
+     </div>
+    </nav>
+    <div style="margin-left: auto">
+     <button class="interActive" id="goInteract">
+      Go Interactive
+     </button>
+    </div>
+   </div>
+  </div>
+  <div class="iframeStyle">
+   <div id="loadingOverlay">
+    <div class="spinner">
+    </div>
+   </div>
+   <div class="iframeStyle" id="container">
+    <div id="imgContainer">
+     <img id="imgGate" onclick="showTextOnClick()" src="assets/AbsenteeBallots.png"/>
+     <div id="message">
+      Click the "Go Interactive" button at the top right
+      <br/>
+      to use an interactive dashboard.
+     </div>
+    </div>
+   </div>
+  </div>
+  <footer>
+   <span>
+    Developed by:
+   </span>
+   <a href="https://www.ipc-global.com/" target="_blank">
+    <img alt="ipc global logo" src="assets/ipc-global-logo-white.png"/>
+   </a>
+  </footer>
+  <script type="module">
+   import {
+      auth,
+      qix,
+    } from "https://cdn.jsdelivr.net/npm/@qlik/api@1/index.min.js";
+    const tenant = "https://sos-ga-gov.us.qlikcloudgov.com";
+    const clientId = "5718bf52ac824c6ea4d5942eecb04223";
+
+    let session;
+    async function addQlikEmbed() {
+      auth.setDefaultHostConfig({
+        host: tenant,
+        clientId: clientId,
+        getAccessToken: "getAccessToken",
+        authType: "Oauth2",
+      });
+
+      session = await qix.openAppSession({
+        appId: "7d780725-d407-4db8-b287-005bb85eda87",
+      });
+
+      const app = await session.getDoc();
+      const appLayout = await app.getAppLayout();
+      console.log(appLayout);
+    }
+
+    async function closeSession(session) {
+      console.log("closing session");
+      await session.close({ websocketCloseDelay: 0 });
+      console.log("session Closed");
+      sessionStorage.removeItem("access_token");
+      sessionStorage.removeItem("token_expiration");
+      location.reload(true);
+    }
+
+    let timer;
+
+    async function runIt(foo) {
+      goInteractive();
+      await addQlikEmbed();
+
+      addEventListener("mousemove", () => {
+        startWait();
+      });
+
+      startWait();
+
+      //setup event listener to clear and reset set timeout on mouse move
+      //await wait(120000);;
+    }
+
+    const wait = (t) => {
+      return new Promise((resolve, reject) => {
+        // Clear the previous timer if it exists
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        // Set a new timer
+        timer = setTimeout(resolve, t);
+      });
+    };
+
+    const startWait = () => {
+      wait(120000).then(async () => {
+        await closeSession(session);
+        console.log("Timer finished after 2 minutes of no movement");
+        // Add additional logic here, e.g., redirect or log out
+      });
+    };
+
+    document
+      .getElementById("goInteract")
+      .addEventListener("click", async function () {
+        console.log("button hit");
+        await runIt();
+      });
+  </script>
+ </body>
+</html>
