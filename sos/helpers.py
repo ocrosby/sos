@@ -45,7 +45,7 @@ def scroll_to_element(driver: WebDriver, element_id: str) -> WebElement:
 
 def execute_script(driver: WebDriver, script: str, web_element: WebElement) -> None:
     """
-    Execute the script on the web element.
+    Execute Javascript on the web element.
 
     :param driver: the WebDriver instance
     :param script: the script to execute
