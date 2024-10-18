@@ -23,3 +23,8 @@ source venv/bin/activate
 pip install -e ".[dev]"
 ```
 
+## Running the Prorgam
+
+```shell
+sos
+```
